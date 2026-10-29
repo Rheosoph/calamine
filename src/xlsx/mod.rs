@@ -2600,7 +2600,8 @@ impl<RS: Read + Seek> Reader<RS> for Xlsx<RS> {
     fn new(mut reader: RS) -> Result<Self, XlsxError> {
         check_for_password_protected(&mut reader)?;
 
-        let zip = ZipArchive::new(reader)?;
+        let mut zip = ZipArchive::new(reader)?;
+        zip.validate_header_consistency()?;
         let zip_path_cache = build_zip_path_cache(&zip)?;
         let mut xlsx = Xlsx {
             zip,

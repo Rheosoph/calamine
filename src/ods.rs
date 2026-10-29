@@ -179,6 +179,7 @@ where
 
     fn new(reader: RS) -> Result<Self, OdsError> {
         let mut zip = ZipArchive::new(reader)?;
+        zip.validate_header_consistency()?;
 
         // check mimetype
         match zip.by_name("mimetype") {
